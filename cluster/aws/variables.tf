@@ -131,3 +131,6 @@ variable "cni_policy_arn" {
   default = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
+variable "ebs_driver_count" {
+  default = 1
+}
