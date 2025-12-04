@@ -32,7 +32,9 @@ variable "node_pool_name" {
 variable "node_count" {
   default = 3
 }
-
+variable "disk_size_gb" {
+  default = 20
+}
 variable "machine_type" {
   default = "e2-medium"
 }
