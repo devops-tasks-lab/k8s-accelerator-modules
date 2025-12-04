@@ -20,6 +20,8 @@ module "eks-cluster" {
   eks_cluter_subnet_ids         = module.vpc.subnet_id
   eks_cluter_Policy             = module.eks_cluster_policy
   eks_Service_Policy            = module.eks_service_policy
+
+  depends_on = [module.vpc]
 }
 
 #======= NODE GROUP =======
@@ -155,95 +157,3 @@ module "cni_policy" {
 #
 #  depends_on = [module.node-group]
 #}
-
-
-#======== NGINX CONTROLER ========
-#
-#module "nginx_controler" {
-#  source = "../../modules/helm"
-#  count = var.nginx_controler_count
-#
-#  providers = {
-#    helm = helm.eks
-#  }
-#
-#  application_name             = var.nginx_controler_name
-#  application_namespace        = var.nginx_controler_namespace
-#  application_chart            = var.nginx_controler_chart
-#  application_version          = var.nginx_controler_version
-#  application_repository       = var.nginx_controler_repository
-#  application_create_namespace = var.nginx_controler_create_namespace
-#  application_values           = var.helm_values_nginx
-#
-#  depends_on = [module.node-group]
-#}
-#
-##======== ARGO CD ========
-#
-#module "argocd" {
-#   source = "../../modules/helm"
-#   count = var.argo_cd_count
-#
-#   providers = {
-#     helm = helm.eks
-#   }
-#   application_name             = var.argocd_name
-#   application_namespace        = var.argocd_namespace
-#   application_chart            = var.argocd_chart
-#   application_version          = var.argocd_version
-#   application_repository       = var.argocd_repository
-#   application_create_namespace = var.argocd_create_namespace
-#   application_values           = var.helm_values_argocd
-#
-#   depends_on = [module.node-group]
-# }
-#
-#
-## #======= CERT MANAGER =======
-#
-# module "cert_manager" {
-#   source = "../../modules/helm"
-#   count = var.cert_meneger_count
-#
-#   providers = {
-#     helm = helm.eks
-#   }
-#
-#   application_name             = "cert-manager"
-#   application_namespace        = "cert-manager"
-#   application_chart            = "cert-manager"
-#   application_version          = "v1.18.2"
-#   application_repository       = "https://charts.jetstack.io"
-#   application_create_namespace = true
-#   application_values = [
-#     <<-EOT
-#     installCRDs: true
-#     EOT
-#   ]
-#
-#   depends_on = [module.node-group]
-# }
-#
-##======= GRAFANA =======
-#
-# module "grafana" {
-#   source = "../../modules/helm"
-#   count = var.grafana_count
-# 
-#   providers = {
-#     helm = helm.eks
-#   }
-#
-#   application_name             = "grafana"
-#   application_namespace        = "grafana"
-#   application_chart            = "grafana" 
-#   application_version          = "10.1.4"  
-#   application_repository       = "https://grafana.github.io/helm-charts"
-#   application_create_namespace = true
-#
-#   # application_values = [
-#   #   file("prometheus-values.yaml")
-#   # ]
-#
-#   depends_on = [module.node-group]
-# }

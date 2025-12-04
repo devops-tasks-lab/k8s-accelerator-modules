@@ -10,4 +10,6 @@ module "prometheus" {
    application_version          = var.prometheus_version
    application_repository       = var.prometheus_repository
    application_create_namespace = var.prometheus_create_namespace
+
+   application_values           = var.prometheus_application_values
  }

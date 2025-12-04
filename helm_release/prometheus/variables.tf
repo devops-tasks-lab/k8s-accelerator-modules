@@ -27,3 +27,7 @@ variable "prometheus_repository" {
 variable "prometheus_create_namespace" {
   default = true
 }
+
+variable "prometheus_application_values" {
+  default = []
+}
