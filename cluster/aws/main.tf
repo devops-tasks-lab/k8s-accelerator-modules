@@ -130,7 +130,7 @@ module "cni_policy" {
 #======== EBS DRIVER ========
 
 module "ebs_driver" {
-  source = "../../../../helm_release/helm"
+  source = "git::https://github.com/devops-tasks-lab/k8s-accelerator-modules.git//helm_release/helm?ref=version-1"
   count  = var.ebs_driver_count
 
   providers = {
