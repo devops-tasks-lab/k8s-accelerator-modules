@@ -133,9 +133,9 @@ module "ebs_driver" {
   source = "git::https://github.com/devops-tasks-lab/k8s-accelerator-modules.git//helm_release/helm?ref=version-1"
   count  = var.ebs_driver_count
 
-  providers = {
-    helm = helm.eks
-  }
+  # providers = {
+  #   helm = helm.eks
+  # }
 
   application_name             = var.ebs_driver_name
   application_namespace        = var.ebs_driver_namespace
