@@ -17,7 +17,7 @@ variable "secrets_store_chart" {
 }
 
 variable "secrets_store_version" {
-  default = "10.1.4"
+  default = "1.5.4"
 }
 
 variable "secrets_store_repository" {

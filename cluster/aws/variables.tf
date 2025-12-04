@@ -131,3 +131,12 @@ variable "cni_policy_arn" {
   default = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
+#======= OIDC ========
+
+variable "service_account_name" {
+  default = "ebs-csi-controller-sa"
+}
+
+variable "service_account_namespace" {
+  default = "kube-system"
+}
