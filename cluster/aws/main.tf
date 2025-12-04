@@ -119,19 +119,19 @@ module "cni_policy" {
 #======== OIDC TOKEN ========
 
 
-module "oidec_token" {
-  source                    = "../../modules/oidc_role"
-  oidc_provider_url         = data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer
-  service_account_name      = var.service_account_name
-  service_account_namespace = var.service_account_namespace
-}
+# module "oidec_token" {
+#   source                    = "../../modules/oidc_role"
+#   oidc_provider_url         = data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer
+#   service_account_name      = var.service_account_name
+#   service_account_namespace = var.service_account_namespace
+# }
 
 
 #======== EBS DRIVER ========
 
 module "ebs_driver" {
   source = "../../modules/helm"
-  count = var.ebs_driver_count
+  count  = var.ebs_driver_count
 
   providers = {
     helm = helm.eks

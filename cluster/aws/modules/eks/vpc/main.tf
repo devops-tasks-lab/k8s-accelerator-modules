@@ -1,6 +1,6 @@
 #==========VPC============
 resource "aws_vpc" "eks_vpc" {
-  count = var.cluster_count
+  count                = var.cluster_count
   cidr_block           = var.eks_vpc
   enable_dns_hostnames = var.enable_dns_hostnames
   enable_dns_support   = var.enable_dns_support
@@ -18,8 +18,8 @@ data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "eks_subnets" {
   #count                   = var.eks_subnet_count
-  count                   = var.cluster_count != 0 ? var.eks_subnet_count : 0
-  vpc_id                  = aws_vpc.eks_vpc[0].id
+  count  = var.cluster_count == 1 ? var.eks_subnet_count : 0
+  vpc_id = aws_vpc.eks_vpc[0].id
   #vpc_id                  = length(aws_vpc.eks_vpc) > 0 ? aws_vpc.eks_vpc[0].id : null 
   cidr_block              = cidrsubnet(aws_vpc.eks_vpc[0].cidr_block, 8, count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -53,7 +53,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count          = var.cluster_count != 0 ? var.eks_subnet_count : 0
+  count          = var.cluster_count == 1 ? var.eks_subnet_count : 0
   subnet_id      = aws_subnet.eks_subnets[count.index].id
   route_table_id = aws_route_table.public[0].id
 }
