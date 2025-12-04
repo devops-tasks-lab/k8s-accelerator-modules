@@ -130,7 +130,7 @@ module "cni_policy" {
 #======== EBS DRIVER ========
 
 module "ebs_driver" {
-  source = "../../modules/helm"
+  source = "../../../../helm_release/helm"
   count  = var.ebs_driver_count
 
   providers = {
