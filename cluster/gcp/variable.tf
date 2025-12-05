@@ -45,6 +45,11 @@ variable "max_node_count" {
   default = 4
 }
 
+variable "disk_size_gb" {
+  default = 50
+}
+
+
 #======== HELM APPLICATIONS =======
 
 variable "ebs_driver_count" {
