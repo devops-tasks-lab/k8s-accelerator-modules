@@ -1,4 +1,4 @@
-#======= GRAFANA =======
+#======= LOKI =======
 
 module "loki" {
    source = "../helm"
