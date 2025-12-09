@@ -47,6 +47,10 @@ variable "max_node_count" {
   default = 4
 }
 
+variable "project_id" {
+  description = "GCP Project ID"
+  type        = string
+}
 #======== HELM APPLICATIONS =======
 
 variable "ebs_driver_count" {
