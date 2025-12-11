@@ -25,7 +25,8 @@ resource "yandex_kubernetes_cluster" "cluster" {
   name       = var.cluster_name
   network_id = yandex_vpc_network.vpc.id
   master {
-    version = var.kubernetes_version
+    version   = var.kubernetes_version
+    public_ip = true
     zonal {
       zone      = var.zone
       subnet_id = yandex_vpc_subnet.subnets[0].id
