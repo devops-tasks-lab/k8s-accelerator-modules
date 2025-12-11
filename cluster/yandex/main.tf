@@ -28,7 +28,7 @@ resource "yandex_kubernetes_cluster" "cluster" {
     version = var.kubernetes_version
     zonal {
       zone      = var.zone
-      subnet_id = yandex_vpc_subnet.subnet.id
+      subnet_id = yandex_vpc_subnet.subnets[0].id
     }
   }
 
@@ -61,14 +61,15 @@ resource "yandex_kubernetes_node_group" "node_group" {
     }
 
     network_interface {
-      subnet_ids = [yandex_vpc_subnet.subnet.id]
+      subnet_ids = [yandex_vpc_subnet.subnets[0].id]
     }
   }
 
   scale_policy {
     auto_scale {
-      min_zone_size = var.min_node_count
-      max_size      = var.max_node_count
+      initial = var.min_node_count
+      min     = var.min_node_count
+      max     = var.max_node_count
     }
   }
 }
