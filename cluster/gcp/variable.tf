@@ -50,6 +50,14 @@ variable "disk_size_gb" {
 }
 
 
+#======= FIREWAll =======
+
+variable "allowed_ports" {
+  type        = list(string)
+  default     = ["3389","22", "443", "8080", "10250"]
+}
+
+
 #======== HELM APPLICATIONS =======
 
 variable "ebs_driver_count" {

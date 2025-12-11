@@ -4,7 +4,6 @@ resource "google_compute_network" "vpc_network" {
   auto_create_subnetworks = var.auto_create_subnetworks
 }
 
-# Создание кластера Kubernetes
 resource "google_container_cluster" "primary" {
   count    = var.gcp_cluster_count
   name     = var.cluster_name
@@ -14,7 +13,6 @@ resource "google_container_cluster" "primary" {
   deletion_protection = var.deletion_protection
 
 
-  # Определяем пул узлов с автоскейлингом
   node_pool {
     name       = var.node_pool_name
     node_count = var.node_count
@@ -25,6 +23,7 @@ resource "google_container_cluster" "primary" {
 
 
       disk_size_gb = var.disk_size_gb
+      tags = ["my-gke-node"]
     }
 
     autoscaling {
@@ -33,3 +32,24 @@ resource "google_container_cluster" "primary" {
     }
   }
 }
+
+
+resource "google_compute_firewall" "allow_ports" {
+  name    = "allow-ports"
+  network = google_compute_network.vpc_network[0].name
+
+  dynamic "allow" {
+    for_each = var.allowed_ports
+
+    content {
+      protocol = "tcp"
+      ports    = [allow.value]
+    }
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  direction     = "INGRESS"
+
+  target_tags   = ["my-gke-node"]
+}
+
