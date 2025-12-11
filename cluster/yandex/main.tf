@@ -1,3 +1,11 @@
+resource "yandex_iam_service_account" "k8s_cluster" {
+  name = "${var.cluster_name}-cluster-sa"
+}
+
+resource "yandex_iam_service_account" "k8s_nodes" {
+  name = "${var.cluster_name}-nodes-sa"
+}
+
 resource "yandex_vpc_network" "vpc" {
   name = var.vpc_name
 }
@@ -16,62 +24,55 @@ resource "yandex_vpc_subnet" "subnets" {
 resource "yandex_kubernetes_cluster" "cluster" {
   name       = var.cluster_name
   network_id = yandex_vpc_network.vpc.id
-
   master {
     version = var.kubernetes_version
-
-    placement {
+    zonal {
       zone      = var.zone
-      subnet_id = element(yandex_vpc_subnet.subnets.*.id, 0)
+      subnet_id = yandex_vpc_subnet.subnet.id
     }
   }
 
-  release_channel = "REGULAR"
+  service_account_id      = yandex_iam_service_account.k8s_cluster.id
+  node_service_account_id = yandex_iam_service_account.k8s_nodes.id
 }
+
 
 ## node_group.tf
 
 resource "yandex_kubernetes_node_group" "node_group" {
   cluster_id = yandex_kubernetes_cluster.cluster.id
-  name       = "${var.cluster_name}-ng"
-
-  version = yandex_kubernetes_cluster.cluster.master[0].version
+  name       = "${var.cluster_name}-nodes"
 
   allocation_policy {
-    # default allocation policy
+    location {
+      zone = var.zone
+    }
   }
 
   instance_template {
-    platform_id = "standard-v3"
-
     resources {
-      memory        = var.node_memory_gb
-      cores         = var.node_cores
-      core_fraction = 100
+      cores  = var.node_cores
+      memory = var.node_memory_gb
     }
 
     boot_disk {
-      initialize_params {
-        size = var.disk_size_gb
-      }
+      type = "network-ssd"
+      size = var.disk_size_gb
     }
 
     network_interface {
-      subnet_id = element(yandex_vpc_subnet.subnets.*.id, 0)
-    }
-
-    metadata = {
-      # add ssh-keys here if you want access to nodes
+      subnet_ids = [yandex_vpc_subnet.subnet.id]
     }
   }
 
   scale_policy {
     auto_scale {
-      min_node_count = var.min_node_count
-      max_node_count = var.max_node_count
+      min_zone_size = var.min_node_count
+      max_size      = var.max_node_count
     }
   }
 }
+
 
 ## outputs.tf
 
