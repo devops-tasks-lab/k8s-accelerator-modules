@@ -43,3 +43,6 @@ variable "node_cores" {
 variable "disk_size_gb" {
   default = 30
 }
+variable "kubernetes_version" {
+  default = "1.33.3"
+}
