@@ -1,6 +1,6 @@
 #======= AWS EBS SC =======
 
-resource "kubernetes_storage_class" "gp3" {
+resource "kubernetes_storage_class_v1" "gp3" {
   #  count = var.storage-class == true ? 1 : 0
   metadata {
     name = var.sc_name
