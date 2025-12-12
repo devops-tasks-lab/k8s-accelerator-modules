@@ -29,5 +29,5 @@ variable "loki_create_namespace" {
 }
 
 variable "loki_application_values" {
-  default = [ ]
+  default = []
 }
