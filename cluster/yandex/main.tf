@@ -1,6 +1,7 @@
 # NAT Gateway
 resource "yandex_vpc_gateway" "nat" {
   name = "${var.cluster_name}-nat"
+  type = "nat"
 }
 
 # Route Table
