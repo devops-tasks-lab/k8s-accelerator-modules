@@ -1,3 +1,18 @@
+# NAT Gateway
+resource "yandex_vpc_gateway" "nat" {
+  name = "${var.cluster_name}-nat"
+}
+
+# Route Table
+resource "yandex_vpc_route_table" "nat" {
+  name       = "${var.cluster_name}-nat-rt"
+  network_id = yandex_vpc_network.vpc.id
+
+  static_route {
+    destination_prefix = "0.0.0.0/0"
+    gateway_id         = yandex_vpc_gateway.nat.id
+  }
+}
 resource "yandex_iam_service_account" "k8s_cluster" {
   name = "${var.cluster_name}-cluster-sa"
 }
@@ -11,7 +26,8 @@ resource "yandex_vpc_network" "vpc" {
 }
 
 resource "yandex_vpc_subnet" "subnets" {
-  count = length(var.subnet_cidrs)
+  count           = length(var.subnet_cidrs)
+  route_table_ids = [yandex_vpc_route_table.nat.id]
 
   name           = "${var.vpc_name}-subnet-${count.index}"
   zone           = element(["ru-central1-a", "ru-central1-b", "ru-central1-d"], count.index)
@@ -74,22 +90,3 @@ resource "yandex_kubernetes_node_group" "node_group" {
     }
   }
 }
-
-
-## outputs.tf
-
-# output "cluster_id" {
-#   value = yandex_kubernetes_cluster.cluster.id
-# }
-
-# output "cluster_name" {
-#   value = yandex_kubernetes_cluster.cluster.name
-# }
-
-# output "node_group_id" {
-#   value = yandex_kubernetes_node_group.node_group.id
-# }
-
-
-
-

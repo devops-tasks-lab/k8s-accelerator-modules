@@ -38,7 +38,7 @@ variable "node_memory_gb" {
   default = 1
 }
 variable "node_cores" {
-  default = 1
+  default = 2
 }
 variable "disk_size_gb" {
   default = 30
