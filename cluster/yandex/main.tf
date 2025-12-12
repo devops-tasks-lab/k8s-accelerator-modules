@@ -26,8 +26,8 @@ resource "yandex_vpc_network" "vpc" {
 }
 
 resource "yandex_vpc_subnet" "subnets" {
-  count           = length(var.subnet_cidrs)
-  route_table_ids = [yandex_vpc_route_table.nat.id]
+  count          = length(var.subnet_cidrs)
+  route_table_id = [yandex_vpc_route_table.nat.id]
 
   name           = "${var.vpc_name}-subnet-${count.index}"
   zone           = element(["ru-central1-a", "ru-central1-b", "ru-central1-d"], count.index)
