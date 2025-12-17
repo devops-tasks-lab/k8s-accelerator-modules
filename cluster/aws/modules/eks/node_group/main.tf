@@ -1,6 +1,6 @@
 #=========EKC NODE GROUP=========
 resource "aws_eks_node_group" "eks_node_group" {
-  count = var.cluster_count
+  count           = var.cluster_count
   cluster_name    = var.cluster_name
   node_group_name = var.node_group_name
   node_role_arn   = var.node_role_arn
@@ -12,8 +12,8 @@ resource "aws_eks_node_group" "eks_node_group" {
     max_size     = var.node_max_size
     min_size     = var.node_min_size
   }
-  remote_access {
-    source_security_group_ids = var.source_security_group_ids
-    ec2_ssh_key               = var.node_ec2_ssh_key
-  }
+  # remote_access { 
+  #   source_security_group_ids = var.source_security_group_ids
+  #   ec2_ssh_key               = var.node_ec2_ssh_key
+  # }
 }
